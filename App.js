@@ -1,58 +1,65 @@
-import * as React from 'react';
-import { View, Text, Button, ImageBackground, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import {TouchableOpacity} from 'react-native';
+// react-navigation
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
+import Icon from 'react-native-vector-icons/FontAwesome';
+// importing screens
+import Home from './src/screens/Home';
+import Setting from './src/screens/Setting';
+import About from './src/screens/About';
+import Splash from './src/screens/Splash';
 
-function HomeScreen({ navigation }) {
-  return (
-    <ImageBackground source={require('./components/background.png')} style={styles.container} >
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.headerText}> Welcome to the SpaceX World!</Text>
-        <Button
-          color="#3C99DC"
-          title="Discover Launches"
-          onPress={() => navigation.navigate('Details')}
-        />
-      </View>
-    </ImageBackground>
-  );
-}
-function DetailsScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-}
-
-const Stack = createNativeStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen}  options={{headerShown: false}}/>
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: 'center',
-    width: null,
-    height: null,
-  },
-  headerText: {
-    fontSize: 24,
-    textAlign: "center",
-    margin: 10,
-    color: "black",
-    fontWeight: "bold"
-  }
+const HomeNavigator = createStackNavigator(
+{
+'Home': {screen: Home,
+navigationOptions: ({navigation}) => ({
+headerLeft: () => (
+<TouchableOpacity
+style={{marginLeft: 20}}
+onPress={() => navigation.toggleDrawer()}>
+<Icon name="indent" size={25} /></TouchableOpacity>
+)})
+},
+'About': {screen: About}
 });
 
+const SettingNavigator = createStackNavigator(
+{
+'Setting': {screen: Setting}
+},{
+defaultNavigationOptions: ({navigation}) => ({
+headerLeft: () => (
+<TouchableOpacity
+style={{marginLeft: 20}}
+onPress={() => navigation.toggleDrawer()}>
+<Icon name="indent" size={25} />
+</TouchableOpacity>
+),
+}),
+});
+
+const DrawerNavigator = createDrawerNavigator({
+Home: {
+navigationOptions: {
+drawerLabel: 'Home', 
+},
+screen: HomeNavigator,
+},
+Setting: {
+navigationOptions: {
+drawerLabel: 'Setting', 
+},
+screen: SettingNavigator,
+}});
+
+const AppSwitchNavigator = createSwitchNavigator({
+'Splash' : {screen : Splash},
+'Drawer' : {screen : DrawerNavigator}
+},
+{
+initialRouteName : 'Splash' 
+})
+const App = createAppContainer(AppSwitchNavigator);
 export default App;
