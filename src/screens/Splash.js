@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, ImageBackground, Button, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, ImageBackground, Button} from 'react-native';
 export default class Splash extends Component {
 
 render() {
 return (
-<ImageBackground source={require('../components/background.png')} style={styles.container} >
+<ImageBackground source={require('../src/components/background.png')} style={styles.container} >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={styles.headerText}> Welcome to the SpaceX World!</Text>
         <Button
           color="#3C99DC"
           title="Discover Launches"
           onPress={() => this.props.navigation.navigate('Home')}
-        />
+        /> 
       </View>
     </ImageBackground>
 );
